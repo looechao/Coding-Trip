@@ -9,12 +9,12 @@ int main()
     printf("%d=1",n);
     while(n>0)
     {
-        for(int i=2;i<=n;i++)
+        for(int i=2;i<=n;i++)   //找到余数的第一个约束
         {
             if(n%i==0)
             {
                 printf("*%d",i);
-                n/=i;
+                n/=i;   //将余数存入n
                 break;
             }
         }
