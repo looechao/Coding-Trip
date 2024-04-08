@@ -1,47 +1,23 @@
 #include<stdio.h>
 
-
-int n,count;
+int n;
 
 int main()
 {
     int sum=1;
-    int *array=NULL; //定义一个空数组
-    scanf("%d",&n);
-    for(int i=1;i<=n;i++)
+    scanf("%d",&n); //读入n
+    printf("%d=1",n);
+    while(n>0)
     {
-        if(i==1)
+        for(int i=2;i<=n;i++)
         {
-            array = realloc(array,(count + 1)*sizeof(int));
-            array[count] = 1;
-            sum*=array[count];
-            count++;
-            if(sum == n) break;
-        }
-        else
-        {
-            if(n%i==0&&i==2)
+            if(n%i==0)
             {
-                sum*=2;
-                array[count] = i;
-                sum*=array[count];
-                count++;
-                if(sum == n) break;
-            }
-            if(n%i==0&&i!=2)
-            {
-                array[count] = i;
-                sum*=array[count];
-                count++;
-                if(sum == n) break;
+                printf("*%d",i);
+                n/=i;
+                break;
             }
         }
-        if(sum == n) break;
-    }
-    printf("%d \n",sum);
-    for(int i=0;i<count;i++)
-    {
-        printf("%d ",array[i]);
     }
     return 0;
 }
