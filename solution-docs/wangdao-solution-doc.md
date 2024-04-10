@@ -537,6 +537,16 @@ int main()
     return 0;
 }
 ```
+# P31★
+题目描述： 声明一个类String，其数据成员为charhead[100]，构造函数String（char
+ *Head）实现head的初始化，成员函数void reverse（）实现head内字符串的
+逆序存放，成员函数void print()实现head内字符串的输出。
+
+#### 思路
+
+
+#### 总结
+
 
 
 
