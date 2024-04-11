@@ -8,7 +8,7 @@ private:
     int sec;    //秒
 public:
     Time(int mm = 0, int ss = 0) : minute(mm), sec(ss) {}
-    // 使用成员函数来重载‘+’运算符
+    // 使用成员函数来重载‘++’运算符
     Time& operator++ ();
     void showtime()
     {

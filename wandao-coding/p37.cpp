@@ -10,12 +10,12 @@ private:
     int c;
 public:
     Triangle(int aa = 0, int bb = 0, int cc = 0) : a(aa), b(bb), c(cc) {}
-    double calcs()
+    double calcs()    //计算面积
     {
         double s=(a+b+c)/2;
         return sqrt(s * (s - a) * (s - b) * (s - c));
     }
-    friend double operator+(Triangle &t1, Triangle &t2);
+    friend double operator+(Triangle &t1, Triangle &t2);   //重载“+”
 };
 
 double operator+ (Triangle &t1, Triangle &t2) {

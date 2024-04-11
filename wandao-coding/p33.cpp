@@ -13,7 +13,11 @@ public:
     }
     int grow(int years)
     {
-        return ages+years;
+        ages+=years;
+    }
+    void showage()
+    {
+        cout<<"增长后的树龄是:"<<ages<<endl;;
     }
 };
 
@@ -23,5 +27,6 @@ int main()
     cout<<"请输入当前树龄和需要增长的年限：";
     cin>>x>>y;
     Tree t1(x);
-    cout<<"增长三十年后的树龄是:"<<t1.grow(y)<<endl;;
+    t1.grow(y);
+    t1.showage();
 }
