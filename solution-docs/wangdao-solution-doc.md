@@ -537,20 +537,416 @@ int main()
     return 0;
 }
 ```
-# P31★
+# P31★★★
 题目描述： 声明一个类String，其数据成员为charhead[100]，构造函数String（char
  *Head）实现head的初始化，成员函数void reverse（）实现head内字符串的
 逆序存放，成员函数void print()实现head内字符串的输出。
 
 #### 思路
+- 声明类
+- 
+#### 总结
+# P32★
+题目描述：定义盒子Box类，要求具有以下成员：可设置盒子形状；可计算盒子体积；
+可计算盒子的表面积
+#### 思路
+- private中存放盒子的长、宽、高
+- public中存放构造函数、计算体积的函数、计算表面积的函数
+#### 总结
+- 注意this 指针的使用
+```c++
+class Box{
+private:
+    int length;  //长
+    int width;  //宽
+    int height; //高
+public:
+    // 添加带参数的构造函数
+    Box(int length, int width, int height) {
+        this->length = length;
+        this->width = width;
+        this->height = height;
+    }
 
+    int calcv()   //计算体积
+    {
+        return width*length*height;
+    }
+    int calcs()    //
+    {
+        return length*width*2+length*height*2+width*height*2;
+    }
+};
+```
+# P33★
+题目描述：  声明一个Tree（树）类，有成员ages(树龄),成员函数grow(int years)用以对ages加上years，showAge()用以显示tree对象的ages值。在主函数中定义Tree类对象，并调用成员函数（自行指定实参数据）。
+#### 思路
+- private 中定义ages
+- public 中声明构造函数、grow()函数、showAge（）函数
+#### 总结
+```c++
+class Tree{
+private:
+    int ages;  //树龄
+public:
+    Tree(int ages)
+    {
+        this->ages=ages;
+    }
+    int grow(int years)
+    {
+        ages+=years;
+    }
+    void showage()
+    {
+        cout<<"增长后的树龄是:"<<ages<<endl;;
+    }
+};
+```
+# P34★
+题目描述： 有一个学生类Student,包括学生姓名、成绩，设计一个友元函数，输出成
+绩对应的等级：
+#### 思路
+- private 存放姓名和成绩
+- public中声明构造函数和友元函数
+#### 总结
+```c++
+class Student{
+private:
+    string name;
+    int score;
+public:
+    //构造函数
+    Student(const string& name, int score) : name(name), score(score) {}
+    //友元函数,可以使用引用传递
+    friend void showscore(Student&);
+};
+```
+# P35★★★
+题目描述：定义一个复数类，用友元函数实现对双目运算符“+”的运算符重载，使其
+适用于复数运算。
+#### 思路
+重载双目运算符“+”
 
 #### 总结
 
 
+# P36★
+题目描述：有一个Time类，包含数据成员minute(分)和sec(秒)，模拟秒表，每次走
+一秒，满60秒进一分钟，此时秒又从0开始算。要求输出分和秒的值。（提示：
+重载单目运算符++）。
+#### 思路
+- private 中声明minute和sec
+- public中声明构造函数 和 重载运算符 “++”
+#### 总结
+```c++
+class Time{
+private:
+    int minute;   //分
+    int sec;    //秒
+public:
+    Time(int mm = 0, int ss = 0) : minute(mm), sec(ss) {}
+    // 使用成员函数来重载‘++’运算符
+    Time& operator++ ();
+    void showtime()
+    {
+        cout<<minute<<":"<<sec;
+    }
+};
 
 
+Time& Time::operator++ ()
+{
+    if(sec!=59)
+    {
+        sec++;
+    }
+    else
+    {
+        sec=0;
+        minute++;
+    }
+    return *this;
+}
 
+int main()
+{
+    Time t1(10,59);
+    ++t1;
+    t1.showtime();
+    return 0;
+}
+```
+# P37★
+题目描述： 设计一个三角形类Triangle，包含三角形三条边长的私有数据成员，另有
+一个重载运算符“+”，以实现求两个三角形对象的面积之和。
+
+#### 思路
+- private 中声明三条边长
+- pubic 中声明构造函数和重载运算符“+”
+#### 总结
+```c++
+
+class Triangle{
+private:
+    int a;
+    int b;
+    int c;
+public:
+    Triangle(int aa = 0, int bb = 0, int cc = 0) : a(aa), b(bb), c(cc) {}
+    double calcs()    //计算面积
+    {
+        double s=(a+b+c)/2;
+        return sqrt(s * (s - a) * (s - b) * (s - c));
+    }
+    friend double operator+(Triangle &t1, Triangle &t2);   //重载“+”
+};
+
+double operator+ (Triangle &t1, Triangle &t2) {
+    return t1.calcs() + t2.calcs();
+}
+int main()
+{
+    Triangle t1(3,4,5);
+    Triangle t2(6,8,10);
+    double totalArea = t1 + t2;
+    cout<<"两三角形的面积之和："<<totalArea<<endl;
+}
+```
+# P38★★★
+题目描述：
+#### 思路
+#### 总结
+# P39★
+题目描述：定义一个抽象类Shape用以计算面积，从中派生出计算长方形、梯形、圆形
+面积的派生类。程序中通过基类指针来调用派生类中的虚函数，计算不同形状的面积。
+#### 思路
+- 基类要写一个虚函数
+- 在长方形、梯形和圆形的public 中重新声明虚函数的内部
+#### 总结
+```c++
+class Shape {
+    public:
+        virtual double calcs() = 0;  // 纯虚函数
+};
+//继承于shape类的长方形类
+class Rectangle: public Shape {
+    double width, height;
+    public:
+        Rectangle(double w, double h) : width(w), height(h) {}
+        double calcs() { return width * height; }  // 重写shape类的虚函数
+};
+```
+# P40★★★
+题目描述：定义计数器类Counter。要求具有以下成员：计数器值；可进行增值和减值
+记数；可提供记数值。
+#### 思路
+
+#### 总结
+# P41★
+题目描述：声明一个哺乳动物Mammal类，再由此派生出狗Dog类，二者都定义speak( )
+成员函数，基类中定义为虚函数。声明一个Dog类的对象，调用speak()函数，
+观察运行结果。
+#### 思路
+考察的继承
+- Mammal类的speak()函数中不输出任何内容；
+- Dog类的speak()函数做出一定的修改，输出wolf！
+#### 总结
+```c++
+class Mammal{
+    public:
+        virtual void speak(){};  // 纯虚函数
+};
+//定义继承于Mammal类的Dog类
+class Dog: public Mammal {
+    public:
+        virtual void speak(){cout<<"wolf!";}  // 纯虚函数
+};
+
+```
+# P42★
+题目描述：编写一个程序计算“三角形、正方形、圆形”三种图形的面积，要求：
+a) 抽象出一个基类Base；
+b) 在其中说明一个虚函数用来求面积；
+c) 利用派生类定义“三角形、正方形、圆形”；
+d) 编写主函数并测试。
+#### 思路
+与P39重复，仅仅是基类的命名不同
+#### 总结
+```c++
+class Base {
+    public:
+        virtual double calcs() = 0;  // 纯虚函数
+};
+//继承于Base类的长方形类
+class Rectangle: public Base {
+    double width, height;
+    public:
+        Rectangle(double w, double h) : width(w), height(h) {}
+        double calcs() { return width * height; }  // 重写shape类的虚函数
+};
+```
+# P43★
+题目描述： 编写一段程序，从标准输入中一次读入一整行，存入std::string中，然后修改该程序，使其一次读入一个词
+#### 思路
+分别使用getline和cin>>实现
+#### 总结
+- 读入一整行文本，可以包含空格
+```c++
+    string line;
+    while(getline(cin,line))
+        cout<<line<<endl;
+```
+-  值读入字符，不能包含空格
+```c++
+    string word;
+	//循环读取，每次读一个单词
+	cout << "请输入字符串" << endl;
+	while (cin>>word)
+		cout << word<< endl;
+	return 0;
+```
+# P44★
+题目描述：解释 string 类型的输入操作符和 getline 函数分别如何处理空白字符。 
+## 解答
+- Cin>>这种方法会自动忽略到空白字符，例如空格和换行符
+- 而getline(cin>>str)不会忽略空白字符，到换行符会自动终止
+# P45★
+题目描述：编写一段程序从标准输入中读入多个字符串并将它们连接在一起，输出连接
+成的大字符串。然后修改上述程序，用空格把输入的多个字符串分隔开来。
+#### 思路
+- 可以使用str1+str2连接字符串
+#### 总结
+```c++
+int main()
+{
+    cin>>str1>>str2;
+    //将stt1和str2连接起来
+    string str=str1+str2;
+    cout<<str<<endl;
+    //用空格分隔两个字符串
+    cout<<str1<<" "<<str2;
+    return 0;
+}
+```
+# P46★
+题目描述：写一段程序，读入一个包含标点符号的字符串，将标点符号去除后输出字
+符串剩余的部分。
+#### 思路
+- 输入字符串
+- 循环扫描读到的每个字符
+- 将除了标点之外的字符存入到新串中
+- 输出新串
+#### 总结
+- 注意空串的定义方法：
+```c++
+int main()
+{
+    string str1;
+    string str2("\0");   //str2用于存放新串,故置空
+    getline(cin,str1);  //读取一行字符
+    for(int i=0;i<str1.size();i++)
+    {
+        if(!ispunct(str1.at(i)))
+        {
+            str2+=str1.at(i);  //将非标点符号的字符放入新串
+        }
+    }
+    cout<<str2;
+}
+```
+# P47★★★ 关于迭代器
+题目描述：编写一段程序，创建一个含有10个整数的vector对象，然后使用迭代器将
+所有元素的值都变成原来的两倍。输出vector对象的内容，检验程序是否正确。
+#### 思路
+- 创建vector<int> num数组
+- 输入num内的元素
+- 用迭代器和for循环将元素的值乘2
+- 输出vector的元素
+#### 总结
+```c++
+    vector<int> num(10,0);
+    for(int i=0;i<num.size();i++)
+    {
+        cin>>num[i];
+    }
+    // 使用迭代器将所有元素的值都变成原来的两倍
+    for(auto it = num.begin(); it != num.end(); ++it)
+    {
+        *it *= 2;
+    }
+    // 输出vector对象的内容
+    for(const auto &value : num)
+    {
+        cout << value << " ";
+    }
+```
+# P48★
+题目描述：编写一段程序，比较两个std::string对象。再编写一段程序，比较两个C
+风格字符串的内容。
+#### 思路
+- C++可以直接比较
+- C语言需要通过string.h库中的strcmp函数
+#### 总结
+- C++风格
+```c++
+    if(s1 == s2)
+```
+- C语言风格
+```c
+	strcmp(s3, s4)
+```
+# P49★
+题目描述：对于下面的程序任务，vector、deque和list哪种容器最为合适？解释你
+的选择的理由。如果没有哪一种容器优于其他容器，也请解释理由。（练习9.1）
+#### 解答
+- 读取固定数量的单词，将他们按字典序插入到容器中。
+```
+选择list, 按字典序插入需要频繁的在中间位置进行插入操作，用list很合适
+```
+- 读取未知数量的单词，总是将新单词插入到末尾。删除操作在头部进行。
+```
+选择deque，支持高效的首位插入和删除操作
+```
+- 从一个文件读取未知数量的整数。将这些数排序，然后将他们打印到标
+准输出
+```
+选择vector, vector在动态增长和内存使用方面更有效率
+```
+# P50★
+题目描述：对6种创建和初始化vector对象的方法，每一种都给出一个实例。解释每
+个vector 包含什么值
+#### 解答
+1. 默认构造
+```c++
+vector<int> v1;   //空的vector，不含任何元素
+```
+2. 填充构造
+```c++
+vector<int> v2(5,10);   //5个元素，每个值都是0
+```
+3. 范围构造
+```c++
+vector<int> v2_copy(v2.begin(),v2.end());   //复制v2开始到结束的副本
+```
+4. 列表初始化
+```c++
+vector<int> v3{1,2,3,4,5};   //v3包含5个元素，值为1，2，3，4，5
+```
+5. 复制构造
+```c++
+vector<int> v4(v3);   //包含v3的所有元素
+```
+6. 移动构造
+```c++
+vector<int> v5(move(v4));  //拥有V4的所有元素，而V4变空
+```
+# P51★
+题目描述：如何从一个list<int>初始化一个vector<double>?从一个vector<int>又
+该如何创建？编写代码验证你的答案。
+#### 思路
+
+#### 总结
 
 
 
@@ -559,6 +955,3 @@ int main()
 题目描述：
 #### 思路
 #### 总结
-
-
-
