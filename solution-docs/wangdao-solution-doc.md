@@ -402,12 +402,35 @@ long sum(int n)    //递归函数
         }
     }
 ```
-# P24★★★
+# P24★★★(不太懂)
 题目描述：国际象棋8x8，皇后横竖斜移动，在一个棋盘放置8个皇后，使他们彼此无法互相威胁
-#### 思路
-8皇后问题
-- 
-#### 总结
+#### 解法（有待研究）：
+
+```c++
+int A[QUEENS + 1], B[QUEENS * 3 + 1], C[QUEENS * 3 + 1], k[QUEENS + 1][QUEENS + 1];
+int inc, *a = A, *b = B + QUEENS, *c = C;
+void lay(int i) {
+  int j = 0, t, u;
+
+  while (++j <= QUEENS)
+    if (a[j] + b[j - i] + c[j + i] == 0) {
+      k[i][j] = a[j] = b[j - i] = c[j + i] = 1;
+      if (i < QUEENS) lay(i + 1);
+      else {
+        ++inc;
+        if (IS_OUTPUT) {
+          for (printf("(%d)\n", inc), u = QUEENS + 1; --u; printf("\n"))
+            for (t = QUEENS + 1; --t; ) k[t][u] ? printf("Q ") : printf("+ ");
+          printf("\n\n\n");
+        }
+      }
+      a[j] = b[j - i] = c[j + i] = k[i][j] = 0;
+    }
+}
+
+```
+
+
 
 # P25★
 题目描述：将某串字符的某部分复制到另一串字符的指定位置
@@ -441,7 +464,41 @@ float sum(int n)
 # P27★★★
 题目描述：已知一个单向链表的头，请写出删除其某一个结点的算法，要求，先找到此结点，然后删除
 #### 思路
+
+- 找到该节点的前一个结点
+- 更改前一个结点的next指针，使其指向下一个节点
+- 删除该节点
+
 #### 总结
+
+链表的操作有待深入研究：
+
+```c++
+// 删除节点函数
+void deleteNode(Node*& head, int value) {
+    if(head == nullptr) {
+        return;
+    }
+    if(head->data == value) {
+        Node* toDelete = head;
+        head = head->next;
+        delete toDelete;
+        return;
+    }
+    Node* current = head;
+    while(current->next != nullptr && current->next->data != value) {
+        current = current->next;
+    }
+    if(current->next != nullptr) {
+        Node* toDelete = current->next;
+        current->next = current->next->next;
+        delete toDelete;
+    }
+}
+```
+
+
+
 # P28★
 题目描述：冒泡法对十个数排序
 #### 思路
@@ -544,8 +601,39 @@ int main()
 
 #### 思路
 - 声明类
-- 
+- 在主函数中调用成员函数
 #### 总结
+
+类的构造
+
+```c++
+class String {
+    char head[100];
+
+public:
+    // 构造函数
+    String(char *Head) {
+        strncpy(head, Head, sizeof(head) - 1);
+        head[sizeof(head) - 1] = '\0';  // 确保结束字符存在
+    }
+
+    // 翻转字符串
+    void reverse() {
+        int len = strlen(head);
+        for(int i = 0; i < len / 2; ++i) {
+            swap(head[i], head[len - 1 - i]);
+        }
+    }
+
+    // 打印字符串
+    void print() {
+        cout << head << endl;
+    }
+};
+```
+
+
+
 # P32★
 题目描述：定义盒子Box类，要求具有以下成员：可设置盒子形状；可计算盒子体积；
 可计算盒子的表面积
@@ -625,10 +713,39 @@ public:
 # P35★★★
 题目描述：定义一个复数类，用友元函数实现对双目运算符“+”的运算符重载，使其
 适用于复数运算。
-#### 思路
-重载双目运算符“+”
+#### 解答（有待深入思考）
 
-#### 总结
+```c++
+class Complex {
+private:
+    double real, imag;
+public:
+    // 构造函数
+    Complex(double r = 0, double i = 0) : real(r), imag(i) {}
+
+    // 使用友元函数来重载‘+’运算符
+    friend Complex operator+ (const Complex &c1, const Complex &c2);
+
+    // 显示复数
+    void display() {
+        cout << real << " + " << imag << "i" << endl;
+    }
+};
+
+Complex operator+ (const Complex &c1, const Complex &c2) {
+    return Complex(c1.real + c2.real, c1.imag + c2.imag);
+}
+
+int main() {
+    Complex c1(3.1, 4.2), c2(2.3, 3.4);
+    Complex c3 = c1 + c2;  // 使用重载的 '+' 运算符
+    c3.display();     // 输出结果
+    return 0;
+}
+
+```
+
+
 
 
 # P36★
@@ -713,10 +830,38 @@ int main()
     cout<<"两三角形的面积之和："<<totalArea<<endl;
 }
 ```
-# P38★★★
-题目描述：
+# P38★
+题目描述： 使用函数重载的方法定义两个重名函数，分别求出整型数的两数之和和浮点 数的两数之和，并在主函数中调用。
 #### 思路
+
+- 定义两个都为sum的重名函数
+- 函数返回的值和处理的值不同，分别是int和float
+
 #### 总结
+
+```c++
+int sum(int a, int b){
+    return a+b;
+}
+
+// 浮点数之和的函数
+float sum(float a, float b){
+    return a+b;
+}
+
+int main(){
+    int x = 1, y = 2;
+    float m = 1.5, n = 2.5;
+    
+    cout << "Integer sum: " << sum(x, y) << endl;  // 输出 "Integer sum: 3"
+    cout << "Float sum: " << sum(m, n) << endl;    // 输出 "Float sum: 4"
+    
+    return 0;
+}
+```
+
+
+
 # P39★
 题目描述：定义一个抽象类Shape用以计算面积，从中派生出计算长方形、梯形、圆形
 面积的派生类。程序中通过基类指针来调用派生类中的虚函数，计算不同形状的面积。
@@ -737,12 +882,23 @@ class Rectangle: public Shape {
         double calcs() { return width * height; }  // 重写shape类的虚函数
 };
 ```
-# P40★★★
+# P40★
 题目描述：定义计数器类Counter。要求具有以下成员：计数器值；可进行增值和减值
 记数；可提供记数值。
-#### 思路
+#### 解答：
 
-#### 总结
+```c++
+class Counter {
+    private:
+        int count; // 计数器值
+    public:
+        Counter() : count(0) {} // 构造函数，初始化计数器为0
+        void increment() { count++; } // 增加计数
+        void decrement() { if(count > 0) count--; } // 减少计数，但不会小于0
+        int get_count() const { return count; } // 返回当前计数
+};
+```
+
 # P41★
 题目描述：声明一个哺乳动物Mammal类，再由此派生出狗Dog类，二者都定义speak( )
 成员函数，基类中定义为虚函数。声明一个Dog类的对象，调用speak()函数，
@@ -945,13 +1101,181 @@ vector<int> v5(move(v4));  //拥有V4的所有元素，而V4变空
 题目描述：如何从一个list<int>初始化一个vector<double>?从一个vector<int>又
 该如何创建？编写代码验证你的答案。
 #### 思路
-
+- 不能直接拷贝
+- 使用vec.begin(), vec.end() 将元素拷贝到其他类型的容器中
 #### 总结
-
-
-
-
-# P★
-题目描述：
+```c++
+ 	list<int> ilist(10,0);
+ 	vector<int> ivec(10,0);
+ 	vector<double> doublevec1(ilist.begin(),ilist.end());//初始化
+ 	vector<double> doublevec2(ivec.begin(),ivec.end());//初始化
+    for(int i=0;i<doublevec1.size();i++)
+    {
+        cout<<doublevec1[i]<<" ";
+    }
+    cout<<endl;
+    for(int i=0;i<doublevec2.size();i++)
+    {
+        cout<<doublevec2[i]<<" ";
+    }
+    return 0;
+```
+# P52★
+题目描述： 编程程序，将一个list中的char*指针（指向C风格字符串）元素赋值给
+一个vector中的string。
 #### 思路
+- 通过clist.cbegin(), clist.cend(), 将字list中的字符串元素传递给stringvec
+- 通过迭代器循环输出stringvec的每个串
 #### 总结
+```c++
+    list<const char*> clist{"string1","string2"};
+    vector<string> stringvec(clist.cbegin(),clist.cend());
+    for(auto i=stringvec.begin();i<=stringvec.end();i++)    //使用迭代器访问元素
+        cout<<*i<<" ";
+    cout<<endl;
+```
+# P53★
+题目描述：编写程序，从标准输入读取string序列，存入一个deque中。编写一个循
+环，用迭代器打印deque中的元素。
+#### 思路
+- 标准输入cin读取string序列
+- 将string入队
+- 通过迭代器输出deque中的所有字符串
+#### 总结
+```c++
+    deque<string> sde;
+    string str;
+    while(cin>>str)
+    {
+        sde.push_back(str);    //将字符串入队
+        if(cin.get()=='\n')
+        {
+            break;
+        }
+    }
+    for(auto i=sde.begin();i<=sde.end();i++)  //循环输出元素
+    {
+        cout<<*i<<" ";
+    }
+```
+# P54★
+题目描述：编写程序，从一个list<int>拷贝元素到两个deque中，其中值为偶数的所
+有元素都拷贝到一个deque中，而奇数元素都拷贝到另一个deque中
+#### 思路
+- 先创建list容器，存入奇偶元素
+- 循环判断元素的奇偶性，分别push到对应的队列中
+#### 总结
+- 注意list的迭代器不能用<=list.end(); 而应该使用!=list.end();
+```c++
+    list<int> ilist{1,2,3,4,5,6,7,8,9,10};
+    deque<int> deq1,deq2;
+    for(auto i=ilist.begin();i!=ilist.end();i++)
+    {
+        if(*i%2==0)
+        {
+            deq2.push_back(*i);
+        }
+        else
+            deq1.push_back(*i);
+    }
+```
+# P55★
+题目描述：假定你希望每次读取一个字符存入一个std::string中，而且知道最少需要
+读取100个字符，应该如何提高程序的性能？
+#### 解答
+由于知道至少读取100个字符，因此可以用reserve先为string分配100个字符的空间，然后逐个读取字符，用push_back添加到string末尾。
+#### 总结
+```c++
+int main() {
+    string s;
+    s.reserve(100);  //预先分配至少100个字符的内存
+    char ch;
+    while(cin >> ch)
+    {
+        s.push_back(ch);
+    }
+
+    return 0;
+}
+```
+# P56★
+题目描述：编写一个函数，接受一个表示名字的std::string参数和两个分别表示前缀
+（如“Mr.”或“Ms.”）和后缀（如“Jr.”“III”）的字符串。使用迭代器及insert 和 append 函数将前缀和后缀加到给定的名字中，生成新的string并返回
+#### 思路
+- 声明字符串 surname 用于存放姓氏
+- 创建函数add_pre_surf()
+#### 总结
+注意insert和append的用法
+```c++
+string add_pre_suf(string n,string pre,string suf)
+{
+    n.insert(n.begin(),pre.begin(),pre.end());
+    n.append(suf);
+    return n;
+}
+```
+# P57★
+题目描述：定义一个map，关键字是家庭的姓，值是一个vector，保存家中孩子（们）
+的名。编写代码，实现添加新的家庭以及向已有家庭中添加新的孩子。
+#### 思路
+- 定义map
+- 将一组家庭的孩子添加到另一组家庭
+- 打印家庭成员
+#### 总结
+- 注意map的创建和使用
+```c++
+    vector<string> vec={"Tom","Jerry","Lucy"};
+    map<string,vector<string>> family = {{"Green",vec},{"White",vec}};
+```
+# P58★
+题目描述：编写一个程序，在一个vector而不是一个set中保存不重复的单词。使用
+set 的优点是什么？
+#### 解答
+- set是一种关联容器，set中的元素只有键，没有实值，往其中插入已存在的元素是无效的，所意set本身所有的元素都是唯一的
+# P59★
+题目描述：可以用什么类型来对一个map进行下标操作？下标运算符返回的类型时什
+么？请给出一个具体例子，即定义一个map，然后写出一个可以用来对map进行
+下标操作的类型以及下标运算符将会返回的类型。
+#### 思路
+- 创建一个map，包含姓名和年龄
+- 用姓名返回出年龄
+#### 总结
+```c++
+int main(){
+    map<string,int> mymap;
+    mymap = {{"Alice",25}};
+    cout<<mymap["Alice"];
+    return 0;
+}
+```
+# P60★
+题目描述： 用冒泡法对10个整数排序。（用STL的vector容器实现）
+#### 思路
+- 创建Vector
+- 存入十个整数
+- 用冒泡法排序
+#### 总结
+```c++
+int main(){
+    vector<int> vec(10,0);
+    for(int i=0;i<vec.size();i++){
+        cin>>vec[i];
+    }
+
+    for(int i=0;i<vec.size()-1;i++){    //冒泡法排序
+        for(int j=0;j<vec.size()-i-1;j++){
+            if(vec[j] > vec[j+1]){
+                int temp = vec[j];
+                vec[j] = vec[j+1];
+                vec[j+1] = temp;
+            }
+        }
+    }
+
+    for(int i=0;i<vec.size();i++){
+        cout<<vec[i]<<" ";
+    }
+
+    return 0;
+}
+```
