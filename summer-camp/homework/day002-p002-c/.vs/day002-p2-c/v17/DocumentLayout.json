@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Documents\\Coding\\wangdao-coding-notebook\\summer-camp\\homework\\day002-p2-c\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4B298089-0320-4341-A825-B2DF6224A2F0}|day002-p2-c\\day002-p2-c.vcxproj|D:\\Documents\\Coding\\wangdao-coding-notebook\\summer-camp\\homework\\day002-p2-c\\day002-p2-c\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{4B298089-0320-4341-A825-B2DF6224A2F0}|day002-p2-c\\day002-p2-c.vcxproj|solutionrelative:day002-p2-c\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.c",
+              "DocumentMoniker": "D:\\Documents\\Coding\\wangdao-coding-notebook\\summer-camp\\homework\\day002-p2-c\\day002-p2-c\\main.c",
+              "RelativeDocumentMoniker": "day002-p2-c\\main.c",
+              "ToolTip": "D:\\Documents\\Coding\\wangdao-coding-notebook\\summer-camp\\homework\\day002-p2-c\\day002-p2-c\\main.c",
+              "RelativeToolTip": "day002-p2-c\\main.c",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-04-23T12:18:14.21Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

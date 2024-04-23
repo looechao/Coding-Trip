@@ -1,0 +1,2 @@
+﻿  main.c
+D:\Documents\Coding\wangdao-coding-notebook\summer-camp\homework\day002-p2-c\day002-p2-c\main.c(7,19): error C2860: “void” 不能用作函数参数，但 “(void)” 除外
