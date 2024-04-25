@@ -1,3 +1,0 @@
-﻿  main.c
-D:\Documents\Coding\wangdao-coding-notebook\summer-camp\homework\FahenheitToCelsius\FahenheitToCelsius\main.c(14,31): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-  FahenheitToCelsius.vcxproj -> D:\Documents\Coding\wangdao-coding-notebook\summer-camp\homework\FahenheitToCelsius\x64\Debug\FahenheitToCelsius.exe
