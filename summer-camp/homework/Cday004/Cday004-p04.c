@@ -53,7 +53,7 @@ int main(void){
         play_game()? wins++:losses++;
         printf("\nPlay again?");
         again = getchar();
-        getchar();
+        while (getchar() !='\n');   
     } while(again == 'y'||again =='Y') ;
     printf("wins:%d losses:%d",wins, losses);
     return 0;    
