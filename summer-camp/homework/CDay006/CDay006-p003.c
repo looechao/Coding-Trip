@@ -187,7 +187,7 @@ void analyze_hand(void){
                 }
             }
         }
-        if(max - min == 4){
+        if(abs(max - min) == 4){
             straight = true;
         }
     }
@@ -200,7 +200,6 @@ void analyze_hand(void){
             flush = true;
         }
     }
-    printf("max_same_num=%d, four = %d  flush=%d \n", max_same_num, four, flush);
 }
 
 void print_result(void){
