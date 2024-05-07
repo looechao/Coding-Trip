@@ -1,7 +1,7 @@
 #include<stdio.h>
 
 int main(){
-    char c = 'a';
-    printf("%c",97);
+    int a = 100;
+    printf("%d",a^a);
     return 0;
 }

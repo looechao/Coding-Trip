@@ -18,8 +18,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/Documents/Coding/wangdao/wandao-coding",
-      "program": "d:/Documents/Coding/wangdao/wandao-coding/build/Debug/outDebug",
+      "cwd": "d:/Documents/Coding/wangdao-coding-notebook/summer-camp/homework/CDay013",
+      "program": "d:/Documents/Coding/wangdao-coding-notebook/summer-camp/homework/CDay013/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
