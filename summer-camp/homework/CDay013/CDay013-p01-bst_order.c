@@ -171,7 +171,14 @@ void bst_destroy(BST* tree){
     printf("");
 }
 
-
+int max_depth(TreeNode* root){
+    if(root == NULL){
+        return 0;
+    }
+    int rightdepth = max_depth(root->right);
+    int leftdepth = max_depth(root->left);
+    return (leftdepth>rightdepth?leftdepth:rightdepth)+1;
+}
 
 //API
 
