@@ -1,0 +1,4 @@
+﻿  main.c
+D:\Documents\Coding\wangdao-coding-notebook\summer-camp\homework\CDay017\scanner\scanner\main.c(142,17): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\Documents\Coding\wangdao-coding-notebook\summer-camp\homework\CDay017\scanner\scanner\main.c(89,1): warning C4715: “strtoken”: 不是所有的控件路径都返回值
+  scanner.vcxproj -> D:\Documents\Coding\wangdao-coding-notebook\summer-camp\homework\CDay017\scanner\x64\Debug\scanner.exe
