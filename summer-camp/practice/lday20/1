@@ -1,0 +1,11 @@
+#include <func.h>
+
+int main(int argc, char *argv[]){
+    // ./1_addr 192.168.118.128 1234
+    ARGS_CHECK(argc,3);
+    struct sockaddr_in addr;
+    addr.sin_family = AF_INET; //IPV4
+    addr.sin_port = htons(atoi(argv[2]));
+    addr.sin_addr.s_addr = inet_addr(argv[1]);
+    printf("port = %x, ip = %x", addr.sin_port, addr.sin_addr.s_addr);
+}
