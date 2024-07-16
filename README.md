@@ -1,3 +1,5 @@
+[CPP-BOOST](./summer-camp/3_cpp-boost-homework)
+
 # P01★
 题目描述：判断输入的不同x值，计算相应的y值。
 #### 思路
