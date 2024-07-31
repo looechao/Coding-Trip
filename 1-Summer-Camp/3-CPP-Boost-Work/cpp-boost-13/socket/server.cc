@@ -16,6 +16,9 @@ using std::cin;
 
 int main(int argc, char** argv)
 {   
+    if(argc < 2){
+        cout << "args error" << endl;
+    }
     //需要创建套接字，使用socket函数
     int listenfd = socket(AF_INET, SOCK_STREAM, 0);
     if(listenfd < 0)

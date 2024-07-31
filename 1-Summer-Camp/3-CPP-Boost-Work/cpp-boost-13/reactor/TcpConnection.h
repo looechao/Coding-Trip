@@ -4,6 +4,10 @@
 #include "Socket.h"
 #include "SocketIO.h"
 #include "InetAddress.h"
+#include <memory>
+
+using std::shared_ptr;
+
 
 class TcpConnection
 {
@@ -15,6 +19,10 @@ public:
 
     //为了方便调试的函数
     string toString();
+public:
+    //添加三个回调函数的注册
+    //添加三个毁掉的执行
+
 
 private:
     //获取本端地址与对端地址
