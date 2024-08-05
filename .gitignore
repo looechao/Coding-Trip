@@ -33,3 +33,7 @@
 
 .DS_Store
 .vscode
+
+# Qt
+
+4-Qt/build*/
