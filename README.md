@@ -2,4 +2,4 @@
 
 [CPP-BOOST](./1-Summer-Camp/3-CPP-Boost-Work)
 
-[CPP-BOOST](./1-Summer-Camp/4-Qt)
+[Qt](./1-Summer-Camp/4-Qt)
