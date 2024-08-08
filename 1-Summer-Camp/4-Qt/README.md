@@ -1,3 +1,5 @@
+# 01
+
 根据如下ui绘制一个计算器，先不实现计算的功能，只实现显示表达式和编辑表达式的功能
 
 QString的append方法可以追加一个字符
@@ -409,4 +411,149 @@ int main(int argc, char *argv[])
    }
    ```
 
-   
+
+# 04
+
+**现在有三个对象ABC，A的父亲是B，B的父亲是C**
+
+**点击A的内部，要求执行：**
+
+**A的filter、event和event_handler**
+
+**B的filter、event**
+
+> ```cpp
+> #include <QApplication>
+> #include <QMainWindow>
+> #include <QFrame>
+> #include <QPushButton>
+> #include <QVBoxLayout>
+> #include <QDebug>
+> #include <QMouseEvent>
+> 
+> class A : public QPushButton {
+>     Q_OBJECT
+> public:
+>     A(QWidget *parent = nullptr) : QPushButton("Button A (Click Me)", parent) {
+>         // 安装事件过滤器
+>         installEventFilter(this);
+>     }
+> 
+> protected:
+>     bool eventFilter(QObject *obj, QEvent *event) override {
+>         if (event->type() == QEvent::MouseButtonPress) {
+>             qDebug() << "A's event filter triggered";
+>         }
+>         return QPushButton::eventFilter(obj, event);  // 继续事件处理
+>     }
+> 
+>     void mousePressEvent(QMouseEvent *event) override {
+>         qDebug() << "A's mousePressEvent";
+>         QPushButton::mousePressEvent(event);  // 调用基类处理
+>     }
+> };
+> 
+> class B : public QFrame {
+>     Q_OBJECT
+> public:
+>     B(QWidget *parent = nullptr) : QFrame(parent) {
+>         setFrameStyle(QFrame::StyledPanel);
+>         setStyleSheet("background-color: lightblue;"); // 设置背景颜色
+>         QVBoxLayout *layout = new QVBoxLayout(this);
+>         layout->addWidget(new A(this));  // 添加 A
+>         setLayout(layout);
+>     }
+> 
+> protected:
+>     bool event(QEvent *event) override {
+>         if (event->type() == QEvent::MouseButtonPress) {
+>             qDebug() << "B's event triggered";
+>         }
+>         return QFrame::event(event);  // 继续事件处理
+>     }
+> };
+> 
+> class C : public QMainWindow {
+>     Q_OBJECT
+> public:
+>     C(QWidget *parent = nullptr) : QMainWindow(parent) {
+>         setWindowTitle("Event Propagation Example");
+>         setFixedSize(400, 300);
+>         
+>         B *b = new B(this);  // 创建 B
+>         setCentralWidget(b);  // 设置 B 为中心控件
+>         
+>         // 设置窗口的背景颜色
+>         setStyleSheet("background-color: lightgray;");
+>     }
+> };
+> 
+> int main(int argc, char *argv[]) {
+>     QApplication app(argc, argv);
+>     C c;  // 创建主窗口 C
+>     c.show();  // 显示窗口
+>     return app.exec();  // 进入应用程序主循环
+> }
+> 
+> #include "main.moc"
+> ```
+
+
+
+**实现一个“打蚊子”游戏**
+
+**在屏幕中央有一个600*400的QWidget，一个用来统计分数的QLabel**
+
+**一开始会在QWidget内部随机位置生成一个蚊子，当鼠标点击到蚊子以后，旧蚊子消失然后在另一个位置生成新的蚊子，分数增加。**
+
+**提示：这里需要继承QWidget类然后重写paintEvent，在paintEvent当中可以创建QPainter对象绘制各种图形和图片**
+
+> ```cpp
+> class MyWidget : public QWidget
+> {
+>     Q_OBJECT
+> public:
+>     explicit MyWidget(QWidget *parent = nullptr);
+>     void paintEvent(QPaintEvent *ev);
+>     void mouseReleaseEvent(QMouseEvent *ev) override{
+>         if (ev->button() == Qt::LeftButton) {
+>                    // 检查点击是否在蚊子区域内
+>                    if (ev->x() >= posX && ev->x() <= posX + 50 &&
+>                        ev->y() >= posY && ev->y() <= posY + 50) {
+>                        // 生成随机位置
+>                        posX = QRandomGenerator::global()->bounded(width() - 50);
+>                        posY = QRandomGenerator::global()->bounded(height() - 50);
+> 
+>                        // 请求重新绘制
+>                        score++;
+>                        qDebug() << score;
+>                        myLabel->setText(QString("score: %1").arg(score));
+>                        update();
+>                    }
+>         }
+>     }
+> 
+> private:
+>     QLabel *myLabel;
+>     int posX; //蚊子图片的x坐标
+>     int posY; //蚊子图片的y坐标
+>     int score; //积分
+> signals:
+> 
+> };
+> ```
+
+
+
+**什么是窗口？怎么样创建一个窗口**
+
+> ### 使用 Qt 创建一个基本窗口的步骤
+>
+> 1. **安装 Qt**：确保您已经安装了 Qt 和 Qt Creator。
+> 2. **创建一个新的 Qt Widgets Application**：
+>    - 打开 Qt Creator。
+>    - 选择“File” -> “New File or Project”。
+>    - 选择“Qt Widgets Application”，然后点击“Choose”。
+>    - 填写项目名称和路径，点击“Next”。
+>    - 选择合适的 Qt 版本和构建套件，点击“Next”。
+>    - 点击“Finish”完成项目创建。
