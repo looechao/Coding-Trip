@@ -557,3 +557,17 @@ int main(int argc, char *argv[])
 >    - 填写项目名称和路径，点击“Next”。
 >    - 选择合适的 Qt 版本和构建套件，点击“Next”。
 >    - 点击“Finish”完成项目创建。
+
+
+
+# 05
+
+**通过修改QWidget的构造函数的参数来实现下面不同风格的窗口，并显示窗口选项**
+
+<img src="./01-assets/05-p01.png" style="zoom:80%;" />
+
+>![](./01-assets/work-05-p01.png)
+
+**尝试使用Model View来展示一个好友名字列表。模型采用线性表即可。**
+
+> ![](./01-assets/work-05-p02.png)
