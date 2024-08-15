@@ -1,88 +1,63 @@
-// WaitGroup 让某个线程处于等待状态
-#include <workflow/WFFacilities.h>
-// WFTaskFactory.h文件里面包含了所有创建任务相关的函数
-#include <workflow/WFTaskFactory.h>
-// HttpUtil.h 文件包含了处理HTTP的工具
-#include <workflow/HttpUtil.h>
 #include <iostream>
 #include <string>
-#include <signal.h>
-using std::cout;
-using std::cerr;
-using std::string;
-static WFFacilities::WaitGroup waitGroup(1);
-void sigHandler(int signum){
-    cout << "done!\n";
-    waitGroup.done();
-}
-void httpCallback(WFHttpTask *httpTask){
-    // 检查报错
-    int state = httpTask->get_state(); //获取状态
-	int error = httpTask->get_error(); //获取errno
-	switch (state){
-	case WFT_STATE_SYS_ERROR:
-		cerr << "system error: " << strerror(error) << "\n";
-		break;
-	case WFT_STATE_DNS_ERROR:
-		cerr << "DNS error: " << gai_strerror(error) << "\n";
-		break;
-	case WFT_STATE_SSL_ERROR:
-		cerr <<"SSL error: " << error << "\n";
-		break;
-	case WFT_STATE_TASK_ERROR:
-		cerr <<"Task error: " << error << "\n"; 
-		break;
-	case WFT_STATE_SUCCESS:
-		break;
-	}
-	if (state != WFT_STATE_SUCCESS){
-		cerr << "Failed. Press Ctrl-C to exit.\n";
-		return;
-	}
-    // 请求的信息
-    protocol::HttpRequest * req = httpTask->get_req();//get_req 获取请求
-    cout << "http request method = " << req->get_method() << "\n"; //get_method 获取请求的方法
-    cout << "http request uri = " << req->get_request_uri() << "\n"; //get_uri 获取path和query
-    cout << "http request version = " << req->get_http_version() << "\n";//get_http_version 获取http版本
-    // 遍历首部字段
-    protocol::HttpHeaderCursor reqCursor(req); //protocol::HttpHeaderCursor 是一个访问所有首部字段的迭代器
-    string key,value;
-    while(reqCursor.next(key,value)){//next是取出下一个首部字段，配合while循环使用
-        cout << "key = " << key << " value = " << value << "\n";
+#include <unordered_map>
+#include <workflow/WFTask.h>
+
+// 模拟 Redis 数据存储
+std::unordered_map<std::string, std::string> redis_db = {
+    {"x1", "x2"},
+    {"x2", "x3"},
+    {"x3", "x4"},
+    {"x4", "100"}
+};
+
+// 查询函数
+std::string query_value(const std::string &key) {
+    std::string value = redis_db[key];
+    if (value.empty()) {
+        return "";  // 如果没有找到，返回空字符串
     }
-    // 响应的信息
-    cout << "--------------------------------------------------\n";
-    protocol::HttpResponse *resp = httpTask->get_resp();//get_resp 获取响应
-    cout << "http response version = " << resp->get_http_version() << "\n"; //get_http_version 获取http版本
-    cout << "http response status code = " << resp->get_status_code() << "\n"; //get_status_code 获取状态码
-    cout << "http response reason phrase = " << resp->get_reason_phrase() << "\n"; //get_reason_phrase 获取原因字符串
-    protocol::HttpHeaderCursor respCursor(resp);
-    while(respCursor.next(key,value)){
-        cout << "key = " << key << " value = " << value << "\n";
+    return value;
+}
+
+// 工作流函数
+void find_final_value(WFTask *task, const std::string &key) {
+    std::string current_key = key;
+    std::string final_value;
+
+    // 逐步查找
+    while (true) {
+        final_value = query_value(current_key);
+        if (final_value.empty()) {
+            std::cerr << "Key not found: " << current_key << std::endl;
+            break;
+        }
+
+        // 如果找到的值是最终值（即不是另一个键），则退出循环
+        if (final_value.find_first_not_of("0123456789") == std::string::npos) {
+            // final_value 是一个数字，表示我们找到了最终值
+            break;
+        }
+
+        // 更新当前键
+        current_key = final_value;
     }
 
-    // workflow框架里面 http报文头和报文体不在一起
-    const void *body; //不可修改指向的内容，可以修改指向
-    size_t size;
-    resp->get_parsed_body(&body,&size);//get_parsed_body 找到报文体内存的首地址
-    cout << static_cast<const char *>(body) << "\n";
+    // 设置结果
+    task->get_resp()->append(final_value);
 }
-int main(){
-    signal(SIGINT,sigHandler);
-    WFHttpTask * httpTask = WFTaskFactory::create_http_task( // 创建任务
-        "http://www.baidu.com", // url
-        10, // 重定向次数上限
-        10, // 重试次数
-        //nullptr); //回调函数
-        httpCallback); //新的回调函数
-    // 在启动任务之前，设置任务的属性
-    // 只能改请求，不能改响应
-    protocol::HttpRequest * req = httpTask->get_req();
-    req->add_header_pair("key1","value1");
-    // 启动任务
-    httpTask->start();
-    httpTask->start();
-    waitGroup.wait();
-    cout << "finished!\n"; 
+
+int main() {
+    // 创建工作流任务
+    WFTask *task = new WFTask();
+    task->set_callback(find_final_value, "x1");
+
+    // 执行工作流
+    task->dispatch();
+
+    // 打印结果
+    std::cout << "Final value: " << task->get_resp()->get_body() << std::endl;
+
+    delete task;
     return 0;
 }
