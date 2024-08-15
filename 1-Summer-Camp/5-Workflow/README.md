@@ -397,7 +397,97 @@ int main(){
 
 # 03
 
+**部署一个登录网站**
 
+**1、在redis服务端当中插入一条用户注册信息（比如 HSET USERINFO LIAO 123）**
+**2、当用户向ip:port/login发生请求的时候，返回postform.html（在今日的共享目录当中有提供）静态资源**
+**3、在用户获取完网页界面之后，在网页上输入用户名和密码，再点击按钮，即可产生一个POST请求**
+**4、使用wireshark可以获取报文的具体格式，并且根据请求数据，返回登录的结果**
+
+
+
+
+
+**阅读下面的代码并尝试添加注释**
+
+```cpp
+#include <workflow/WFFacilities.h>
+#include <workflow/MySQLUtil.h>
+#include <workflow/MySQLResult.h>
+#include <iostream>
+#include <signal.h>
+using std::string;
+using std::cerr;
+static WFFacilities::WaitGroup waitGroup(1);
+void sighandler(int signum){
+    std::cout << "signum = " << signum << "\n";
+    waitGroup.done();
+}
+void mysqlCallback(WFMySQLTask * mysqlTask){
+    if(mysqlTask->get_state() != WFT_STATE_SUCCESS){
+        // 在系统层面报错，权限or密码
+        cerr << "error_msg =  " << WFGlobal::get_error_string(mysqlTask->get_state(), mysqlTask->get_error()) << "\n";
+        return;
+    }
+    protocol::MySQLResponse * resp = mysqlTask->get_resp();
+    if(resp->get_packet_type() == MYSQL_PACKET_ERROR){
+        // 在SQL语句报错
+        cerr << "error_code = " << resp->get_error_code() << " error_msg = " << resp->get_error_msg() << "\n";
+        return;
+    }
+    protocol::MySQLResultCursor cursor(resp);
+    do{
+        if(cursor.get_cursor_status() == MYSQL_STATUS_OK){
+            // 写类型的SQL语句
+            cerr << "write \n";
+            cerr << cursor.get_affected_rows() << " rows affected\n";
+        }
+        else if(cursor.get_cursor_status() == MYSQL_STATUS_GET_RESULT){
+            // 读类型的SQL语句
+            cerr << "read \n";
+            // 读表头 列的信息 field
+            const protocol::MySQLField * const * fieldArr;
+            fieldArr = cursor.fetch_fields();
+            for(int i = 0; i < cursor.get_field_count(); ++i){
+                cerr << "db = " << fieldArr[i]->get_db()
+                     << " table = " << fieldArr[i]->get_table()
+                     << " name = " << fieldArr[i]->get_name()
+                     << " type = " << datatype2str(fieldArr[i]->get_data_type()) << "\n";
+            }
+            // 读表的内容 每一行每一列
+            // bool fetch_all(std::vector<std::vector<MySQLCell>>& rows);
+            std::vector<std::vector<protocol::MySQLCell>> rows;
+            cursor.fetch_all(rows);
+            for(auto &row:rows){
+                for(auto &cell:row){
+                    if(cell.is_int()){
+                        cerr << cell.as_int();
+                    }
+                    else if(cell.is_string()){
+                        cerr << cell.as_string();
+                    }
+                    else if(cell.is_datetime()){
+                        cerr << cell.as_datetime();
+                    }
+                    cerr << "\t";
+                }
+                cerr << "\n";
+            } 
+        }
+    }while(cursor.next_result_set()); //mysql 任务支持一个任务处理多个SQL语句
+}
+int main(){
+    signal(SIGINT,sighandler);
+    WFMySQLTask * mysqlTask =  WFTaskFactory::create_mysql_task("mysql://root:123@localhost",1,mysqlCallback);
+    string sql = "insert into mycloud.tbl_user_token (user_name,user_token) values ('Caixukun','singdancerap');";
+    //string sql;
+    sql += "select * from mycloud.tbl_user_token;";
+    mysqlTask->get_req()->set_query(sql);
+    mysqlTask->start();
+    waitGroup.wait();
+    return 0;
+}
+```
 
 # 04
 
